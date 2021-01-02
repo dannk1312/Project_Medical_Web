@@ -1,0 +1,96 @@
+﻿@model Web_Store.Models.PaidBill
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div class="user-form" style="width:80%">
+    <div>
+        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","PaidBills")'"><h2>PaidBill</h2></button>
+        <button type="button" class="btn btn-success" style="pointer-events:none">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+    <hr />
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="form-group col-md-6">
+                    Nhà Xuất Bản
+                    <div style="color:black">
+                        @Html.DropDownList("PublisherId", null, htmlAttributes: new { @class = "form-control chosen-select" })
+                        @Html.ValidationMessageFor(model => model.PublisherId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    Trạng Thái
+                    <div>
+                        @Html.DropDownList("StatusId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <hr style="margin: 0px;color:white" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group" style="margin:0px">
+                        Vật Phẩm
+                        <div style="color:black">
+                            @Html.DropDownList("ItemId", null, htmlAttributes: new { @class = "form-control chosen-select" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6" style="margin:0px">
+                            Số Lượng
+                            <div>
+                                <input id="ItemQuantity" type="number" name="itemQuantity" value="1" min="1"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6" style="margin:0px">
+                            Giá Cả
+                            <div>
+                                <input id="ItemPrice" type="number" name="itemPrice" value="1" min="1" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-1">
+                    <div>
+                        <button type="button" class="form-control btn btn-warning" style="padding:30px 0px 70px 0px; font-size:30px;margin-top:20px" onclick="addDelivery()"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    Đơn Hàng
+                    <textarea style="width:100%;padding:5px 10px;height:160px !important" name="billtext" placeholder="Đơn hàng rỗng ..." value="@ViewBag.billtext"></textarea>
+                </div>
+            </div>
+            <hr style="margin: 10px;color:white" />
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <button type="submit" class="btn btn-success" style="width:100%">Create</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<script>
+    function addDelivery() {
+        var data = document.getElementById("ItemId").value+ ":" +document.getElementsByClassName("chosen-single")[1].getElementsByTagName("span")[0].innerHTML;
+        data += "\tSL:" +document.getElementById("ItemQuantity").value + "\tGiá:";
+        data += document.getElementById("ItemPrice").value + "\n";
+
+        document.getElementsByTagName("textarea")[0].value += data;
+    }
+</script>

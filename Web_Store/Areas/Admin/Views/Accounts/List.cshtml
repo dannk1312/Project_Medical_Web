@@ -1,0 +1,73 @@
+﻿@model PagedList.IPagedList<Web_Store.Models.Account>
+@using PagedList.Mvc;
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","Accounts")'"><h2>Account</h2></button>
+</div>
+
+<div>
+    <h3 style="float:left">List</h3>
+    <button style="float:right" type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Accounts")'">
+        Account <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            Tài Khoản
+        </th>
+        <th>
+            Họ và Tên
+        </th>
+        <th>
+            Số Điện Thoại
+        </th>
+        <th>
+            Quyền Truy Cập
+        </th>
+        <th>
+            Phương Thức
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Access.Name)
+            </td>
+            <td style="width:120px">
+                <button style="float:left" type="button" class="btn btn-warning btn-thin" onclick="location.href='@Url.Action("Edit","Accounts", new { id=item.Username })'">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button style="float:left" type="button" class="btn btn-info btn-thin" onclick="location.href='@Url.Action("Details","Accounts", new { id=item.Username })'">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+                @*<button style="float:left" type="button" class="btn btn-danger btn-thin" onclick="Delete('@item.Username','Accounts')">
+                    Delete <i class="fa fa-ban" aria-hidden="true"></i>
+                </button>*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("List", new { page }))
+

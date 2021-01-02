@@ -1,0 +1,26 @@
+﻿@model Web_Store.Models.News
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","News")'"><h2>News</h2></button>
+    <button type="button" class="btn btn-info" style="pointer-events:none">
+        <i class="fa fa-info" aria-hidden="true"></i>
+    </button>
+</div>
+
+<div>
+    @Html.Raw(Model.Content)
+    <hr />
+    @Html.DisplayNameFor(model => model.isPublic) @Html.DisplayFor(modelItem => Model.isPublic)
+    <br />
+    @Html.DisplayNameFor(model => model.Date)  @Html.DisplayFor(modelItem => Model.Date)
+    <br />
+    Người viết:  @Html.DisplayFor(modelItem => Model.Username)
+    <br />
+    Cuộc Thảo Luận: @Html.DisplayFor(modelItem => Model.Discuss.Name)
+</div>
+

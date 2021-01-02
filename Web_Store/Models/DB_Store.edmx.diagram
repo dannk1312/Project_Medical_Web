@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bcc722a61c4848e686e5db4b8c7941ac" Name="Diagram1">
+        <EntityTypeShape EntityType="DB_StoreModel.Access" Width="1.5" PointX="1.5" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Account" Width="1.5" PointX="3.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Author" Width="1.5" PointX="0.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Category" Width="1.5" PointX="5.25" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Delivery" Width="1.5" PointX="8.25" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Discuss" Width="1.5" PointX="0.75" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.EarnBill" Width="1.5" PointX="6" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Item" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Message" Width="1.5" PointX="6" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.News" Width="1.5" PointX="6" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.PaidBill" Width="1.5" PointX="6" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Publisher" Width="1.5" PointX="3.75" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Receipt" Width="1.5" PointX="8.25" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.Status" Width="1.5" PointX="3.75" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_StoreModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="DB_StoreModel.FK_Account_Access" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_EarnBill_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Message_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_News_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Book_Author" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Delivery_EarnBill" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Delivery_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Item_Discuss" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Message_Discuss" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_News_Discuss" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_EarnBill_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Receipt_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_PaidBill_Publisher" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_PaidBill_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.FK_Receipt_PaidBill" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_StoreModel.ItemCategory" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_StoreModel.ItemRate" Width="1.5" PointX="8.375" PointY="6.125" />
+        <AssociationConnector Association="DB_StoreModel.FK_BookRate_Account" />
+        <AssociationConnector Association="DB_StoreModel.FK_BookRate_Book" />
+        <AssociationConnector Association="DB_StoreModel.FK_Discuss_Account" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

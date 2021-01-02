@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Web_Store.Models.EarnBill>
+
+
+
+@foreach (var item in Model)
+{
+    if (item.Status.Name == "Đang Chờ")
+    {
+        <div style="padding:5px 10px">
+            @foreach (var run in item.Deliveries)
+            {
+                <div class="col-md-4" style="height:80px;float:left;padding:0px">
+                    <div class="card-horizontal">
+                        <div>
+                            <img src="@run.Item.ImagePath" style="width:55px;height:80px;">
+                        </div>
+                        <div class="card-body" style="padding:5px;">
+                            <div>
+                                <div class="short-text"><b>@run.Item.Name</b></div>
+                            </div>
+                            <div>
+                                ( Giá: @(Convert.ToInt32(run.Price))đ SL:@run.Quantity )
+                                <br />
+                                <button class="btn btn-info" style="padding:0px 10px;"><i class="fas fa-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div style="clear:both; padding:5px 10px">
+            <button class="btn btn-primary" style="width:33%; margin-left:33%;margin-top:10px" onclick="$('#btnBag').click()">Edit</button>
+        </div>
+    }
+    else if (item.Status.Name == "Đã Huỷ")
+    {
+        <div style="padding:5px 10px">
+            @foreach (var run in item.Deliveries)
+            {
+                <div class="col-md-4" style="height:80px;float:left;padding:0px">
+                    <div class="card-horizontal">
+                        <div>
+                            <img src="@run.Item.ImagePath" style="width:55px;height:80px;">
+                        </div>
+                        <div class="card-body" style="padding:5px;">
+                            <div>
+                                <div class="short-text"><b>@run.Item.Name</b></div>
+                            </div>
+                            <div>
+                                ( Giá: @(Convert.ToInt32(run.Price))đ )
+                                <br />
+                                <button class="btn btn-info element-nothing" onclick="btnView(@run.ItemId)"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-success element-nothing">Lấy</button>
+                                <button class="btn btn-danger element-nothing">Xoá</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (item.Price > 0)
+    {
+        <table class="table">
+            <tr style="border-bottom:1px solid black">
+                <td>
+                    [@{
+                        String temp = item.BillId.ToString();
+                        while (temp.Length < 5)
+                        {
+                            temp = '0' + temp;
+                        }
+                        <b>@temp</b>
+                    }]<br />@item.Date.ToString("dd/MM/yy hh:mm")<br />@Convert.ToInt32(item.Price)đ
+                   <br />ĐC: @item.Address
+                </td>
+                <td style="border-left:1px solid black">
+                    <table>
+                        @foreach (var run in item.Deliveries)
+                        {
+                            <tr style="border-bottom: 1px dotted gray">
+                                <td class="element-nothing"><p class="short-text" style="width:100px;float:left"><b>@run.Item.Name</b></p>(@Convert.ToInt32(run.Price)đ)x@(run.Quantity)</td>
+                                <td class="element-nothing">
+                                    <button class="btn btn-info element-nothing" onclick="btnView(@run.ItemId)"><i class="fas fa-eye"></i></button>
+                                    @if (item.Status.Name == "Đã Hoàn Thành")
+                                    {
+                                        <button class="btn btn-warning element-nothing" onclick="btnRate(@run.ItemId)"><i style="color:white" class="fas fa-star"></i></button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+        </table>
+    }
+}
+

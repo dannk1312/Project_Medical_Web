@@ -1,0 +1,152 @@
+﻿@model Web_Store.Models.Account
+
+@{
+    ViewBag.Title = "View";
+}
+
+<style>
+    @@media only screen and (max-width: 500px) {
+        .user-form {
+            width: 96% !important;
+            margin: 2% !important;
+            padding: 5px;
+            position: unset !important;
+        }
+    }
+</style>
+
+<div class="row">
+    <div class="user-form col-md-5">
+        <div class="user-title">
+            <h4>@Html.DisplayFor(model => model.Username)</h4>
+            <p>[ @Html.DisplayFor(model => model.Access.Name) ]</p>
+        </div>
+        <hr />
+        <div class="row">
+            <dl class="dl-horizontal col-5">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd class="short-text">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreateDate)
+                </dt>
+
+                <dd class="short-text">
+                    @Convert.ToDateTime(Model.CreateDate).ToString("dd/MM/yyyy")
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Birthday)
+                </dt>
+
+                <dd class="short-text">
+                    @Convert.ToDateTime(Model.Birthday).ToString("dd/MM/yyyy")
+
+                </dd>
+
+            </dl>
+            <dl class="dl-horizontal col-5">
+                <dt class="short-text">
+                    @Html.DisplayNameFor(model => model.Phone)
+                </dt>
+
+                <dd class="short-text">
+                    @Html.DisplayFor(model => model.Phone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd class="short-text">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
+
+                <dd class="short-text">
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
+            </dl>
+        </div>
+        <button class="btn btn-outline-warning" style="width:100%" onclick="location.href = '@Url.Action("Edit","User" , new { id = Model.Username} )'">Chỉnh Sửa</button>
+    </div>
+    <div class="user-form col-md-6">
+        <div class="user-title">
+            <h4>Các Đơn Hàng Của Bạn</h4>
+            <div style="padding: 10px 0px 0px 0px">
+            </div>
+            <hr style="margin:10px 0px 0px 0px" />
+            <div class="btn-group" role="group" aria-label="" style="width:100%;">
+                <button type="button" class="btn btn-secondary">Đang Chờ</button>
+                <button type="button" class="btn btn-secondary">Đang Xử Lí</button>
+                <button type="button" class="btn btn-secondary">Đang Vận Chuyển</button>
+                <button type="button" class="btn btn-secondary">Đã Hoàn Thành</button>
+                <button type="button" class="btn btn-secondary">Đã Huỷ</button>
+            </div>
+        </div>
+        <div id="listBill">
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="user-form col-md-11">
+        <h4 class="col-md-12" style="text-align:center">Các Tin Đăng Của Bạn</h4>
+        <hr />
+        @foreach (var item in Model.News)
+        {
+            if (item.isPublic == true)
+            {
+                <div id="@(item.DiscussId)news" class="card" style="width:100%">
+                    <div class="card-horizontal">
+                        <div style="width:100%;padding:5px 10px">@Html.Raw(item.Content)</div>
+                    </div>
+                    <div style="padding:5px 10px;">
+                        <div style="float:right">Người viết: <b>@item.Username</b></div>
+                        <br style="clear:right" />
+                        <div style="float:right">@item.Date</div>
+                    </div>
+                    <hr style="margin:0px" />
+                    <footer style="padding:5px 10px">
+                        @Html.Partial("../Partial/_Discuss", item.Discuss)
+                    </footer>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="user-form col-md-11">
+        <h4 class="col-md-12" style="text-align:center">Các Cuộc Thảo Luận Của Bạn</h4>
+        <hr />
+        @foreach (var item in Model.Discusses)
+        {
+            <div id="@(item.DiscussId)news" class="card" style="width:100%">
+                <div style="background-color:whitesmoke; width:100%;padding:5px 10px "><b>@item.Name</b></div>
+                <div class="card-horizontal">
+                    <div style="width:100%;padding:5px 10px">@Html.Raw(item.Introduce)</div>
+                </div>
+                <div style="padding:5px 10px;">
+                    <div style="float:right">Người viết: <b>@item.Username</b></div>
+                    <br style="clear:right" />
+                    <div style="float:right">@item.StartDate</div>
+                </div>
+                <hr style="margin:0px" />
+                <footer style="padding:5px 10px">
+                    @Html.Partial("../Partial/_Discuss", item)
+                </footer>
+            </div>
+        }
+    </div>
+</div>
+
+

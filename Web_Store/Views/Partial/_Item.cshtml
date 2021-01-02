@@ -1,0 +1,51 @@
+﻿@model Web_Store.Models.Item
+
+<style>
+    .container {
+        padding: 2px 10px 5px 10px;
+    }
+</style>
+
+<div id="@(Model.ItemId)item" class="card" style="width: 200px;height:400px;font-size:14px">
+    <div>
+        <div style="height:250px;" onclick="btnView(@Model.ItemId)"><img src="@Model.ImagePath" alt="Book" style="width:200px;height:250px;"></div>
+        <div class="container">
+            <p class="short-text">
+                <b>@Model.Name</b>
+            </p>
+            <p class="card-content" style="margin-bottom:0px">
+                Tác Giả: @Model.Author.Name
+                <br />
+                Đánh giá: @(Model.ItemRates.Count() == 0?MvcHtmlString.Create("(Chưa đánh giá)"): Html.Partial("../Partial/_Star", Model.Rate))
+
+                <br />
+
+                @{
+                    if (Model.Sale == null || Model.Sale == 0)
+                    {
+                        @:@Convert.ToInt32(Model.Price)đ
+                    }
+                    else
+                    {
+                        @:<del>@Convert.ToInt32(Model.Price)</del>đ
+                        @:<del>@Convert.ToInt32(Model.Price * (100 - Model.Sale) / 100)</del>đ
+                    }
+                }
+                - SL: @Model.Quantity
+            </p>
+            <div style="float:right">
+                <div id="@(Model.ItemId)btn" style="display:inline"><button class="btn btn-success" onclick="btnToBag('@Model.ItemId')"><i class="fas fa-shopping-basket"></i></button></div>
+                <button class="btn btn-info" onclick="btnView(@Model.ItemId)"><i class="fas fa-eye"></i></button>
+            </div>
+            <br style="clear:both" />
+        </div>
+    </div>
+</div>
+
+<script>
+    if (@Model.Quantity== 0) {
+        document.getElementById("@(Model.ItemId)btn").innerHTML = '<button style="background-color:gray" class="btn btn-success" onclick="alert(\'Vật phẩm không đủ số lượng ... xin lỗi vì sự bất tiện này\')"><i class="fas fa-shopping-basket"></i></button>';
+    }
+</script>
+
+

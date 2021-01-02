@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<form method="post" class="user-form">
+    <h4 class="user-title">Đăng Nhập</h4>
+    <hr />
+    <label for="Username">Tài Khoản</label>
+    <input type="text" id="Username" name="Username" placeholder="Nhập Tài Khoản ..." />
+    <label for="Password">Mật Khẩu</label>
+    <input type="password" id="Password" name="Password" placeholder="Nhập Mật Khẩu ..." />
+    <button class="btn btn-primary" style="width:100%">Đăng Nhập</button>
+    <div style="text-align:center"><a href='@Url.Action("ForgotPassword","User")'>Quên Mật Khẩu ?</a></div>
+    <hr />
+    <button type="button" class="btn btn-success" style="width:100%" onclick="location.href = '@Url.Action("SignUp","User")'">Đăng Ký</button>
+</form>
+
+<script>
+    if ('@ViewBag.err' != '') {
+        alert('@ViewBag.err');
+    }
+</script>

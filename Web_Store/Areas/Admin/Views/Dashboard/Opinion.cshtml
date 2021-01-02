@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Web_Store.Models.Discuss>
+
+@{
+    ViewBag.Title = "Opinion";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h4><b>Opinion</b></h4>
+
+@foreach (var r in Model)
+{
+    <div>
+        <div id="@(r.DiscussId)opinion" class="card" style="width:90%;color:black;padding:0px">
+            <div style="background-color:whitesmoke; width:100%;padding:5px 10px "><b>@r.Name</b></div>
+            <button class="btn btn-default" style="position:absolute;top:5px;right:5px" onclick="delOpinion('@(r.DiscussId)')"><i style="font-size:20px" class="fas fa-times"></i></button>
+
+            <div class="card-horizontal">
+                <div style="width:100%;padding:5px 10px">@Html.Raw(r.Introduce)</div>
+            </div>
+            <div style="padding:5px 10px;">
+                <div style="float:right"><button class="btn btn-info" onclick="location.href='@Url.Action("Edit","Accounts", new { id=r.Username })'">@r.Username</button></div>
+                <br style="clear:right" />
+                <div style="float:right">@r.StartDate</div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,520 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB_StoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Access">
+    <Key>
+      <PropertyRef Name="AccessId" />
+    </Key>
+    <Property Name="AccessId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Accounts" Relationship="Self.FK_Account_Access" FromRole="Access" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="Username" />
+    </Key>
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="AccessId" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Access" Relationship="Self.FK_Account_Access" FromRole="Account" ToRole="Access" />
+    <NavigationProperty Name="EarnBills" Relationship="Self.FK_EarnBill_Account" FromRole="Account" ToRole="EarnBill" />
+    <NavigationProperty Name="Messages" Relationship="Self.FK_Message_Account" FromRole="Account" ToRole="Message" />
+    <NavigationProperty Name="News" Relationship="Self.FK_News_Account" FromRole="Account" ToRole="News" />
+    <NavigationProperty Name="ItemRates" Relationship="DB_StoreModel.FK_BookRate_Account" FromRole="Account" ToRole="ItemRate" />
+    <NavigationProperty Name="Discusses" Relationship="DB_StoreModel.FK_Discuss_Account" FromRole="Account" ToRole="Discuss" />
+  </EntityType>
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="AuthorId" />
+    </Key>
+    <Property Name="AuthorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Introduce" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Items" Relationship="Self.FK_Book_Author" FromRole="Author" ToRole="Item" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Introduce" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Items" Relationship="Self.ItemCategory" FromRole="Category" ToRole="Item" />
+  </EntityType>
+  <EntityType Name="Delivery">
+    <Key>
+      <PropertyRef Name="ItemId" />
+      <PropertyRef Name="BillId" />
+    </Key>
+    <Property Name="ItemId" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="BillId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="EarnBill" Relationship="Self.FK_Delivery_EarnBill" FromRole="Delivery" ToRole="EarnBill" />
+    <NavigationProperty Name="Item" Relationship="Self.FK_Delivery_Item" FromRole="Delivery" ToRole="Item" />
+  </EntityType>
+  <EntityType Name="Discuss">
+    <Key>
+      <PropertyRef Name="DiscussId" />
+    </Key>
+    <Property Name="DiscussId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="Introduce" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Items" Relationship="Self.FK_Item_Discuss" FromRole="Discuss" ToRole="Item" />
+    <NavigationProperty Name="Messages" Relationship="Self.FK_Message_Discuss" FromRole="Discuss" ToRole="Message" />
+    <NavigationProperty Name="News" Relationship="Self.FK_News_Discuss" FromRole="Discuss" ToRole="News" />
+    <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Account" Relationship="DB_StoreModel.FK_Discuss_Account" FromRole="Discuss" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="EarnBill">
+    <Key>
+      <PropertyRef Name="BillId" />
+    </Key>
+    <Property Name="BillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StatusId" Type="Int32" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_EarnBill_Account" FromRole="EarnBill" ToRole="Account" />
+    <NavigationProperty Name="Deliveries" Relationship="Self.FK_Delivery_EarnBill" FromRole="EarnBill" ToRole="Delivery" />
+    <NavigationProperty Name="Status" Relationship="Self.FK_EarnBill_Status" FromRole="EarnBill" ToRole="Status" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ItemId" />
+    </Key>
+    <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PublishDate" Type="DateTime" Precision="0" />
+    <Property Name="AuthorId" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Introduce" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DiscussId" Type="Int32" />
+    <Property Name="Sale" Type="Int32" />
+    <NavigationProperty Name="Author" Relationship="Self.FK_Book_Author" FromRole="Item" ToRole="Author" />
+    <NavigationProperty Name="Deliveries" Relationship="Self.FK_Delivery_Item" FromRole="Item" ToRole="Delivery" />
+    <NavigationProperty Name="Discuss" Relationship="Self.FK_Item_Discuss" FromRole="Item" ToRole="Discuss" />
+    <NavigationProperty Name="Receipts" Relationship="Self.FK_Receipt_Item" FromRole="Item" ToRole="Receipt" />
+    <NavigationProperty Name="Categories" Relationship="Self.ItemCategory" FromRole="Item" ToRole="Category" />
+    <Property Name="Rate" Type="Double" />
+    <Property Name="QuantitySold" Type="Int32" />
+    <NavigationProperty Name="ItemRates" Relationship="DB_StoreModel.FK_BookRate_Book" FromRole="Item" ToRole="ItemRate" />
+  </EntityType>
+  <EntityType Name="Message">
+    <Key>
+      <PropertyRef Name="DiscussId" />
+      <PropertyRef Name="Username" />
+      <PropertyRef Name="MessageId" />
+    </Key>
+    <Property Name="DiscussId" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="MessageId" Type="Int32" Nullable="false" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Time" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_Message_Account" FromRole="Message" ToRole="Account" />
+    <NavigationProperty Name="Discuss" Relationship="Self.FK_Message_Discuss" FromRole="Message" ToRole="Discuss" />
+  </EntityType>
+  <EntityType Name="News">
+    <Key>
+      <PropertyRef Name="NewsId" />
+    </Key>
+    <Property Name="NewsId" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="isPublic" Type="Boolean" Nullable="false" />
+    <Property Name="DiscussId" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_News_Account" FromRole="News" ToRole="Account" />
+    <NavigationProperty Name="Discuss" Relationship="Self.FK_News_Discuss" FromRole="News" ToRole="Discuss" />
+  </EntityType>
+  <EntityType Name="PaidBill">
+    <Key>
+      <PropertyRef Name="BillId" />
+    </Key>
+    <Property Name="BillId" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StatusId" Type="Int32" Nullable="false" />
+    <Property Name="PublisherId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Publisher" Relationship="Self.FK_PaidBill_Publisher" FromRole="PaidBill" ToRole="Publisher" />
+    <NavigationProperty Name="Status" Relationship="Self.FK_PaidBill_Status" FromRole="PaidBill" ToRole="Status" />
+    <NavigationProperty Name="Receipts" Relationship="Self.FK_Receipt_PaidBill" FromRole="PaidBill" ToRole="Receipt" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+  </EntityType>
+  <EntityType Name="Publisher">
+    <Key>
+      <PropertyRef Name="PublisherId" />
+    </Key>
+    <Property Name="PublisherId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Introduce" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PaidBills" Relationship="Self.FK_PaidBill_Publisher" FromRole="Publisher" ToRole="PaidBill" />
+  </EntityType>
+  <EntityType Name="Receipt">
+    <Key>
+      <PropertyRef Name="ItemId" />
+      <PropertyRef Name="BillId" />
+    </Key>
+    <Property Name="ItemId" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="BillId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Item" Relationship="Self.FK_Receipt_Item" FromRole="Receipt" ToRole="Item" />
+    <NavigationProperty Name="PaidBill" Relationship="Self.FK_Receipt_PaidBill" FromRole="Receipt" ToRole="PaidBill" />
+  </EntityType>
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="StatusId" />
+    </Key>
+    <Property Name="StatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="EarnBills" Relationship="Self.FK_EarnBill_Status" FromRole="Status" ToRole="EarnBill" />
+    <NavigationProperty Name="PaidBills" Relationship="Self.FK_PaidBill_Status" FromRole="Status" ToRole="PaidBill" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Account_Access">
+    <End Role="Access" Type="Self.Access" Multiplicity="1" />
+    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Access">
+        <PropertyRef Name="AccessId" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="AccessId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EarnBill_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="EarnBill" Type="Self.EarnBill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="EarnBill">
+        <PropertyRef Name="Username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Message_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="Message" Type="Self.Message" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="Username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_News_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="News" Type="Self.News" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="News">
+        <PropertyRef Name="Username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Book_Author">
+    <End Role="Author" Type="Self.Author" Multiplicity="1" />
+    <End Role="Item" Type="Self.Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="AuthorId" />
+      </Principal>
+      <Dependent Role="Item">
+        <PropertyRef Name="AuthorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Delivery_EarnBill">
+    <End Role="EarnBill" Type="Self.EarnBill" Multiplicity="1" />
+    <End Role="Delivery" Type="Self.Delivery" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EarnBill">
+        <PropertyRef Name="BillId" />
+      </Principal>
+      <Dependent Role="Delivery">
+        <PropertyRef Name="BillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Delivery_Item">
+    <End Role="Item" Type="Self.Item" Multiplicity="1" />
+    <End Role="Delivery" Type="Self.Delivery" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="ItemId" />
+      </Principal>
+      <Dependent Role="Delivery">
+        <PropertyRef Name="ItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Item_Discuss">
+    <End Role="Discuss" Type="Self.Discuss" Multiplicity="0..1" />
+    <End Role="Item" Type="Self.Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Discuss">
+        <PropertyRef Name="DiscussId" />
+      </Principal>
+      <Dependent Role="Item">
+        <PropertyRef Name="DiscussId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Message_Discuss">
+    <End Role="Discuss" Type="Self.Discuss" Multiplicity="1" />
+    <End Role="Message" Type="Self.Message" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Discuss">
+        <PropertyRef Name="DiscussId" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="DiscussId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_News_Discuss">
+    <End Role="Discuss" Type="Self.Discuss" Multiplicity="0..1" />
+    <End Role="News" Type="Self.News" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Discuss">
+        <PropertyRef Name="DiscussId" />
+      </Principal>
+      <Dependent Role="News">
+        <PropertyRef Name="DiscussId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EarnBill_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+    <End Role="EarnBill" Type="Self.EarnBill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="StatusId" />
+      </Principal>
+      <Dependent Role="EarnBill">
+        <PropertyRef Name="StatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Receipt_Item">
+    <End Role="Item" Type="Self.Item" Multiplicity="1" />
+    <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="ItemId" />
+      </Principal>
+      <Dependent Role="Receipt">
+        <PropertyRef Name="ItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PaidBill_Publisher">
+    <End Role="Publisher" Type="Self.Publisher" Multiplicity="1" />
+    <End Role="PaidBill" Type="Self.PaidBill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Publisher">
+        <PropertyRef Name="PublisherId" />
+      </Principal>
+      <Dependent Role="PaidBill">
+        <PropertyRef Name="PublisherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PaidBill_Status">
+    <End Role="Status" Type="Self.Status" Multiplicity="1" />
+    <End Role="PaidBill" Type="Self.PaidBill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="StatusId" />
+      </Principal>
+      <Dependent Role="PaidBill">
+        <PropertyRef Name="StatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Receipt_PaidBill">
+    <End Role="PaidBill" Type="Self.PaidBill" Multiplicity="1" />
+    <End Role="Receipt" Type="Self.Receipt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PaidBill">
+        <PropertyRef Name="BillId" />
+      </Principal>
+      <Dependent Role="Receipt">
+        <PropertyRef Name="BillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ItemCategory">
+    <End Role="Item" Type="Self.Item" Multiplicity="*" />
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="DB_StoreEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accesses" EntityType="Self.Access" />
+    <EntitySet Name="Accounts" EntityType="Self.Account" />
+    <EntitySet Name="Authors" EntityType="Self.Author" />
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Deliveries" EntityType="Self.Delivery" />
+    <EntitySet Name="Discusses" EntityType="Self.Discuss" />
+    <EntitySet Name="EarnBills" EntityType="Self.EarnBill" />
+    <EntitySet Name="Items" EntityType="Self.Item" />
+    <EntitySet Name="Messages" EntityType="Self.Message" />
+    <EntitySet Name="News" EntityType="Self.News" />
+    <EntitySet Name="PaidBills" EntityType="Self.PaidBill" />
+    <EntitySet Name="Publishers" EntityType="Self.Publisher" />
+    <EntitySet Name="Receipts" EntityType="Self.Receipt" />
+    <EntitySet Name="Status" EntityType="Self.Status" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_Account_Access" Association="Self.FK_Account_Access">
+      <End Role="Access" EntitySet="Accesses" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EarnBill_Account" Association="Self.FK_EarnBill_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="EarnBill" EntitySet="EarnBills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Message_Account" Association="Self.FK_Message_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Message" EntitySet="Messages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_News_Account" Association="Self.FK_News_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="News" EntitySet="News" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Book_Author" Association="Self.FK_Book_Author">
+      <End Role="Author" EntitySet="Authors" />
+      <End Role="Item" EntitySet="Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Delivery_EarnBill" Association="Self.FK_Delivery_EarnBill">
+      <End Role="EarnBill" EntitySet="EarnBills" />
+      <End Role="Delivery" EntitySet="Deliveries" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Delivery_Item" Association="Self.FK_Delivery_Item">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="Delivery" EntitySet="Deliveries" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Item_Discuss" Association="Self.FK_Item_Discuss">
+      <End Role="Discuss" EntitySet="Discusses" />
+      <End Role="Item" EntitySet="Items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Message_Discuss" Association="Self.FK_Message_Discuss">
+      <End Role="Discuss" EntitySet="Discusses" />
+      <End Role="Message" EntitySet="Messages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_News_Discuss" Association="Self.FK_News_Discuss">
+      <End Role="Discuss" EntitySet="Discusses" />
+      <End Role="News" EntitySet="News" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EarnBill_Status" Association="Self.FK_EarnBill_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="EarnBill" EntitySet="EarnBills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Receipt_Item" Association="Self.FK_Receipt_Item">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="Receipt" EntitySet="Receipts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PaidBill_Publisher" Association="Self.FK_PaidBill_Publisher">
+      <End Role="Publisher" EntitySet="Publishers" />
+      <End Role="PaidBill" EntitySet="PaidBills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PaidBill_Status" Association="Self.FK_PaidBill_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="PaidBill" EntitySet="PaidBills" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Receipt_PaidBill" Association="Self.FK_Receipt_PaidBill">
+      <End Role="PaidBill" EntitySet="PaidBills" />
+      <End Role="Receipt" EntitySet="Receipts" />
+    </AssociationSet>
+    <AssociationSet Name="ItemCategory" Association="Self.ItemCategory">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
+    <EntitySet Name="ItemRates" EntityType="DB_StoreModel.ItemRate" />
+    <AssociationSet Name="FK_BookRate_Account" Association="DB_StoreModel.FK_BookRate_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="ItemRate" EntitySet="ItemRates" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BookRate_Book" Association="DB_StoreModel.FK_BookRate_Book">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="ItemRate" EntitySet="ItemRates" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Discuss_Account" Association="DB_StoreModel.FK_Discuss_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Discuss" EntitySet="Discusses" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ItemRate">
+    <Key>
+      <PropertyRef Name="ItemId" />
+      <PropertyRef Name="Username" />
+    </Key>
+    <Property Name="ItemId" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Rate" Type="Double" Nullable="false" />
+    <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Account" Relationship="DB_StoreModel.FK_BookRate_Account" FromRole="ItemRate" ToRole="Account" />
+    <NavigationProperty Name="Item" Relationship="DB_StoreModel.FK_BookRate_Book" FromRole="ItemRate" ToRole="Item" />
+  </EntityType>
+  <Association Name="FK_BookRate_Account">
+    <End Type="DB_StoreModel.Account" Role="Account" Multiplicity="1" />
+    <End Type="DB_StoreModel.ItemRate" Role="ItemRate" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="ItemRate">
+        <PropertyRef Name="Username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BookRate_Book">
+    <End Type="DB_StoreModel.Item" Role="Item" Multiplicity="1" />
+    <End Type="DB_StoreModel.ItemRate" Role="ItemRate" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="ItemId" />
+      </Principal>
+      <Dependent Role="ItemRate">
+        <PropertyRef Name="ItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Discuss_Account">
+    <End Type="DB_StoreModel.Account" Role="Account" Multiplicity="1" />
+    <End Type="DB_StoreModel.Discuss" Role="Discuss" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Discuss">
+        <PropertyRef Name="Username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

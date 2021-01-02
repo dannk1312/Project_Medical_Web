@@ -1,0 +1,145 @@
+﻿body {
+    background-color: black;
+}
+
+.body-content {
+    padding: 70px 20px !important;
+    background-color: white;
+}
+
+.navbar {
+    position: fixed !important;
+    width: 100%;
+    z-index: 1000;
+}
+
+.nav-item {
+    margin-left: 10px;
+}
+
+.search_box {
+    width: 100%;
+    border: 1px solid #888888;
+    border-radius: 6px;
+    box-shadow: 2px 4px #888888;
+    padding: 10px 20px;
+    z-index: 999;
+}
+
+
+.btn-nothing {
+    border: 0px;
+    background-color: transparent;
+}
+
+.bg-fade {
+    background-color: black;
+    opacity: 0.4;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1200;
+}
+
+.light-box {
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    z-index: 1201;
+    border-radius: 12px;
+}
+
+    .light-box h1, .light-box h2, .light-box h3, .light-box h4, .light-box h5, .light-box h6 {
+        text-align: center;
+    }
+
+    .light-box input {
+        padding: 10px 20px;
+        max-width: 100%;
+        border: 1px solid #808080;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    .light-box .form-group {
+        margin: 0px !important;
+    }
+
+.user-form {
+    width: 500px;
+    margin: 25px auto;
+    padding: 20px;
+    border: 1px solid #808080;
+    border-radius: 12px;
+    box-shadow: 2px 4px #888888;
+}
+
+    .user-form .user-title {
+        text-align: center;
+    }
+
+    .user-form input {
+        padding: 10px 20px;
+        max-width: 100%;
+        border: 1px solid #808080;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+@media only screen and (max-width: 500px) {
+    .user-form {
+        width: 90% !important;
+        position: absolute !important;
+        margin: 10px 0px 0px -45% !important;
+    }
+
+}
+
+@media only screen and (max-width: 700px) {
+
+    .hide {
+        display: none;
+    }
+}
+
+.short-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 160px;
+    padding: 0px;
+    border: 0px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: auto;
+    margin: 3px;
+    float: left;
+    font-size: 15px;
+}
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .card button {
+        float: right;
+        margin-left: 1px;
+        padding: 2px 5px;
+    }
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.element-nothing {
+    border: 0px !important;
+    margin: 1px !important;
+    padding: 1px 10px !important;
+}

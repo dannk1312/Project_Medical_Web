@@ -1,0 +1,49 @@
+﻿@model Web_Store.Models.Account
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal user-form">
+    <h4 class="user-title" name="Username">@Html.DisplayFor(model => model.Username)</h4>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Username)
+    @Html.HiddenFor(model => model.CreateDate)
+    @Html.HiddenFor(model => model.AccessId)
+    <hr />
+
+    @Html.LabelFor(model => model.Password)  <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Password)
+    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Phone)  <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Phone)
+    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+
+    <hr />
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Birthday)
+    @Html.EditorFor(model => model.Birthday)
+    @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Address)
+    @Html.EditorFor(model => model.Address)
+    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Email)
+    @Html.EditorFor(model => model.Email)
+    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+    <button class="btn btn-warning" style="width:100%">Chỉnh Sửa</button>
+    <hr />
+    <button class="btn btn-outline-danger" onclick="location.href = '@Url.Action("Details","User" , new { id = Model.Username} )'" style="width:100%">Huỷ</button>
+</div>
+}

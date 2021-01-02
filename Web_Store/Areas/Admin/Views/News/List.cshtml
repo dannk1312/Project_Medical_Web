@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Web_Store.Models.News>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","News")'"><h2>News</h2></button>
+</div>
+
+<div>
+    <h3 style="float:left">List</h3>
+    <button style="float:right" type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","News")'">
+        News <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+</div>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Content)
+        </th>
+        <th>
+            Phương Thức
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.Raw(item.Content)
+        <hr />
+        @Html.DisplayNameFor(model => model.isPublic) @Html.DisplayFor(modelItem => item.isPublic)
+        <br />
+        @Html.DisplayNameFor(model => model.Date)  @Html.DisplayFor(modelItem => item.Date)
+        <br />
+        Người viết:  @Html.DisplayFor(modelItem => item.Username)
+        <br />
+        Cuộc Thảo Luận: @Html.DisplayFor(modelItem => item.Discuss.Name)
+    </td>
+    <td style="width:120px">
+        <button style="float:left" type="button" class="btn btn-warning btn-thin" onclick="location.href='@Url.Action("Edit","News", new { id=item.NewsId })'">
+            <i class="fa fa-edit" aria-hidden="true"></i>
+        </button>
+        <button style="float:left" type="button" class="btn btn-info btn-thin" onclick="location.href='@Url.Action("Details","News", new { id=item.NewsId })'">
+            <i class="fa fa-info" aria-hidden="true"></i>
+        </button>
+   
+    </td>
+</tr>
+}
+
+</table>

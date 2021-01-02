@@ -1,0 +1,85 @@
+﻿@model PagedList.IPagedList<Web_Store.Models.Discuss>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Thảo Luận";
+}
+
+<div class="row" style="margin:10px 30px;">
+    <h4 class="col-md-12" style="text-align:center">Đăng Bài</h4>
+    <div class="col-md-12" style="padding:0px">
+        <input class="form-control" name="name" id="name" style="width:100% !important" placeholder="Tên tiêu đề ...." />
+        <textarea name="introduce" id="introduce" style="width:100% !important" placeholder="Viết bài thảo luận của bạn ...."></textarea>
+    </div>
+    <button class="col-md-12 btn btn-success" type="button" onclick="postDiscuss()">Đăng</button>
+</div>
+
+<hr />
+
+<div class="row" style="margin:10px 30px">
+    <h3 class="col-md-12" style="text-align:center">Các Cuộc Thảo Luận</h3>
+    <hr />
+    @foreach (var r in Model)
+    {
+        <div class="card" style="width:100%">
+            <div style="background-color:whitesmoke; width:100%;padding:5px 10px "><b>@r.Name</b></div>
+
+            <div class="card-horizontal">
+                <div style="width:100%;padding:5px 10px">@Html.Raw(r.Introduce)</div>
+            </div>
+            <div style="padding:5px 10px;">
+                <div style="float:right">Người viết: <b>@r.Username</b></div>
+                <br style="clear:right" />
+                <div style="float:right">@r.StartDate</div>
+            </div>
+            <hr style="margin:0px;clear:both" />
+            <div>
+                <div style="text-align:center"><a style="cursor:pointer;color:blue" onclick="btnCmt('@(r.DiscussId)discuss')"><u>Hiện bình luận</u></a></div>
+                <footer style="padding:5px 10px;display:none">
+                    <b>Bình Luận:</b>
+                    <div id="@(r.DiscussId)discuss">
+                        @Html.Partial("../Partial/_Discuss", r)
+                    </div>
+                </footer>
+            </div>
+        </div>
+    }
+</div>
+
+<div style="margin:0px 30px">
+    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Discuss", new { page }))
+</div>
+
+<script>
+    function btnCmt(id) {
+        if (document.getElementById(id).parentElement.parentElement.getElementsByTagName("footer")[0].style.display == "none") {
+            document.getElementById(id).parentElement.parentElement.getElementsByTagName("footer")[0].style.display = "block";
+            document.getElementById(id).parentElement.parentElement.getElementsByTagName("u")[0].innerHTML = "Ẩn bình luận";
+        }
+        else {
+            document.getElementById(id).parentElement.parentElement.getElementsByTagName("footer")[0].style.display = "none";
+            document.getElementById(id).parentElement.parentElement.getElementsByTagName("u")[0].innerHTML = "Hiện bình luận";
+        }
+    }
+    function postDiscuss() {
+        var val = CKEDITOR.instances['introduce'].getData();
+
+        if (val != '') {
+            $.ajax({
+                type: "POST",
+                url: "/Home/postDiscuss",
+                data: { name: document.getElementById('name').value, introduce: val },
+                success: function (done) {
+                    if (done == "True") {
+                        alert("Đăng bài thành công ....");
+                        location.reload();
+                    }
+                    else {
+                        alert("Đăng thất bại ....");
+                    }
+                },
+            });
+        }
+    }
+</script>
+

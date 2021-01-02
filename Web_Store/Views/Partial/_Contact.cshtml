@@ -1,0 +1,14 @@
+﻿
+
+<div class="bg-fade"></div>
+<div id="Contact" class="user-form light-box" style="margin:-200px 0px 0px -25%;width:50%;padding:5px 10px;;position:fixed">
+    <button class="btn btn-default" style="position:absolute;top:5px;right:5px" onclick="btnCloseView()"><i style="font-size:20px" class="fas fa-times"></i></button>
+    <h4>Đóng góp ý kiến</h4>
+    <hr style="clear:both" />
+    <div class="container"> 
+        <textarea  name="Introduce" id="Introduce" style="width:100%" placeholder="Nhập Nội Dung ... " ></textarea>
+        <p style="float:right">- bởi <b>@HttpContext.Current.User.Identity.Name</b></p>
+    </div>
+    <button class="btn btn-success" style="width:100%" onclick="btnContact()">Lưu</button>
+</div>
+

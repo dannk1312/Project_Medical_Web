@@ -1,0 +1,50 @@
+﻿@model Web_Store.Models.Publisher
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","Publishers")'"><h2>Publisher</h2></button>
+    <button type="button" class="btn btn-info" style="pointer-events:none">
+        <i class="fa fa-info" aria-hidden="true"></i>
+    </button>
+</div>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Introduce)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Introduce)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+    </dl>
+</div>

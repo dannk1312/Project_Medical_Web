@@ -1,0 +1,50 @@
+﻿@model Web_Store.Models.Account
+
+@{
+    ViewBag.Title = "SignUp";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal user-form">
+    <h4 class="user-title">Đăng Ký</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Username) <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Username)
+    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Password)  <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Password)
+    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Phone)  <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Phone)
+    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Address)  <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Address)
+    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Email)  <b style="color:red">*</b>
+    @Html.EditorFor(model => model.Email)
+    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+    <hr />
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.Birthday)
+    @Html.EditorFor(model => model.Birthday)
+    @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+
+
+    <button class="btn btn-success" style="width:100%">Đăng Ký</button>
+    <hr />
+    <button class="btn btn-danger" type="button" onclick="location.href = '@Url.Action("Login","User" )'" style="width:100%">Huỷ</button>
+</div>
+}

@@ -1,0 +1,72 @@
+﻿@model PagedList.IPagedList<Web_Store.Models.News>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Tin Mới";
+}
+
+
+<div class="row" style="margin:10px 30px">
+    <h3 class="col-md-12" style="text-align:center">Bài Viết</h3>
+    <hr />
+    @foreach (var item in Model)
+    {
+        if (item.isPublic == true)
+        {
+            <div id="@(item.DiscussId)news" class="card" style="width:100%">
+                <div class="card-horizontal">
+                    <div style="width:100%;padding:5px 10px">@Html.Raw(item.Content)</div>
+                </div>
+                <div style="padding:5px 10px;">
+                    <div style="float:right">Người viết: <b>@item.Username</b></div>
+                    <br style="clear:right" />
+                    <div style="float:right">@item.Date</div>
+                </div>
+                <hr style="margin:0px;clear:both" />
+                <div style="padding:5px 10px"> 
+                    <b>Bình Luận:</b>
+                    <footer>
+                        @Html.Partial("../Partial/_Discuss", item.Discuss)
+                    </footer>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div style="margin:0px 30px">
+    Bài Viết @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("News", new { page }))
+</div>
+
+<hr />
+
+<div class="row" style="margin:10px 30px;">
+    <h3 class="col-md-12" style="text-align:center">Đăng Tin</h3>
+    <div class="col-md-12" style="padding:0px">
+        <textarea name="userNews" id="userNews" style="width:100% !important" placeholder="Viết bài của bạn ...."></textarea>
+    </div>
+    <button class="col-md-12 btn btn-success" type="button" onclick="postNews()">Đăng</button>
+</div>
+
+
+
+
+<script>
+    function postNews() {
+        var val = CKEDITOR.instances['userNews'].getData();
+
+        if (val != '') {
+            $.ajax({
+                type: "POST",
+                url: "/Home/postNews",
+                data: { post: val },
+                success: function (done) {
+                    if (done == "True") {
+                        alert("Đăng bài thành công, chờ được duyệt ....");
+                    }
+                    else alert("Đăng bài không thành công, xin lỗi vì sự bất tiện này ....");
+                },
+            });
+        }
+    }
+</script>

@@ -1,0 +1,66 @@
+﻿@model PagedList.IPagedList<Web_Store.Models.Publisher>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","Publishers")'"><h2>Publisher</h2></button>
+</div>
+
+<div>
+    <h3 style="float:left">List</h3>
+    <button style="float:right" type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Publishers")'">
+        Publisher <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            Nhà Xuất Bản
+        </th>
+        <th>
+            Số Điện Thoại
+        </th>
+        <th>
+            Địa Chỉ
+        </th>
+        <th>
+            Phương Thức
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td style="width:120px">
+                <button style="float:left" type="button" class="btn btn-warning btn-thin" onclick="location.href='@Url.Action("Edit","Publishers", new { id=item.PublisherId })'">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button style="float:left" type="button" class="btn btn-info btn-thin" onclick="location.href='@Url.Action("Details","Publishers", new { id=item.PublisherId })'">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+                @*<button style="float:left" type="button" class="btn btn-danger btn-thin" onclick="Delete('@item.PublisherId','Publishers')">
+                        Delete <i class="fa fa-ban" aria-hidden="true"></i>
+                    </button>*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("List", new { page }))

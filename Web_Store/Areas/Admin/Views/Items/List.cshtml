@@ -1,0 +1,91 @@
+﻿@model PagedList.IPagedList<Web_Store.Models.Item>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","Items")'"><h2>Item</h2></button>
+</div>
+
+<div>
+    <h3 style="float:left">List</h3>
+    <button style="float:right" type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Items")'">
+        Item <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+</div>
+<hr style="clear:both" />
+<button style="float:right; margin-right:5px" type="button" class="btn btn-warning" onclick="location.href='@Url.Action("ExportExcel","Items")'">
+    Download Excel <i class="fas fa-file-export"></i>
+</button>
+<form method="post" action="ImportExcel" style="float:left" enctype="multipart/form-data">
+    <button style="margin-right:5px" type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("ImportExcel","Items")'">
+        Upload Excel <i class="fas fa-file-import"></i>
+    </button>
+    <input type="file" id="FileUpload" name="FileUpload" accept=".xlsx,.xls" />
+</form>
+
+<table class="table">
+    <tr>
+        <th>
+            Vật Phẩm
+        </th>
+        <th>
+            Thể Loại
+        </th>
+        <th>
+            Số Lượng
+        </th>
+        <th>
+            Giá Thành
+        </th>
+        <th>
+            Tác Giả
+        </th>
+        <th>
+            Phương Thức
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td style="width:30%">
+                @foreach (var run in item.Categories)
+                {
+                    <button class="btn btn-danger" style="padding:1px 2px" type="button" onclick="location.href='@Url.Action("Edit","Categories", new { id=run.CategoryId })'">@run.Name</button>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Convert.ToInt32(item.Price)đ
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.Name)
+            </td>
+
+            <td style="width:120px">
+                <button style="float:left" type="button" class="btn btn-warning btn-thin" onclick="location.href='@Url.Action("Edit","Items", new { id=item.ItemId })'">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button style="float:left" type="button" class="btn btn-info btn-thin" onclick="location.href='@Url.Action("Details","Items", new { id=item.ItemId })'">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+                @*<button style="float:left" type="button" class="btn btn-danger btn-thin" onclick="Delete('@item.ItemId','Items')">
+                        Delete <i class="fa fa-ban" aria-hidden="true"></i>
+                    </button>*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("List", new { page }))

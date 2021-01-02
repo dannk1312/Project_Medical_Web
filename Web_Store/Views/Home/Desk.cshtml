@@ -1,0 +1,164 @@
+﻿@model PagedList.IPagedList<Web_Store.Models.Item>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Kệ Thuốc";
+    var listCategories = ViewBag.Categories;
+}
+
+<div class="row" style="background-color:whitesmoke">
+    @Html.Partial("../Partial/_Carousel", Model)
+</div>
+<div class="row" style="margin:10px">
+    <div class="col-md-3" style="padding:0px">
+        <form method="post" action="/Home/Search" class="search_box">
+            <h4 style="text-align: center;">Tìm Nhanh</h4>
+            <hr style="margin:5px" />
+            <div class="form-group">
+                <label for="">Thuốc</label>
+                @Html.DropDownList("ItemId", null, htmlAttributes: new { @class = "form-control chosen-select", @placeholder = "Tìm Thuốc ..." })
+            </div>
+
+            <hr style="margin:5px" />
+
+            <div class="form-group">
+                <button type="button" class="btn btn-info" style="width:100%" onclick="btnView(document.getElementById('ItemId').value)">Tìm</button>
+            </div>
+        </form>
+        <br />
+        <form id="decorForm" method="post" action="/Home/Filter" class="search_box">
+            <h4 style="text-align: center;">Duyệt</h4>
+            <hr style="margin:5px" />
+
+            <div class="form-group">
+                <label for="">Tác Giả</label>
+                @Html.DropDownList("AuthorId", null, htmlAttributes: new { @class = "form-control chosen-select", @placeholder = "Tìm Tác Giả ..." })
+            </div>
+            <div class="form-group">
+                <label for="">Thể Loại</label>
+                @Html.DropDownList("Categories", null, htmlAttributes: new { @class = "form-control chosen-select", @multiple = "true", @placeholder = "Tìm Thể Loại ..." })
+            </div>
+            <div class="form-group">
+                <label for="">Sắp Xếp <i class="fas fa-sort"></i></label>
+                <div class="row" style="padding-left:15px">
+                    <div class="col-md-5" style="padding:0px 2px">
+                        <select class="form-control " name="nameSort" id="nameSort">
+                            <option>-Lựa Chọn-</option>
+                            <option value="Đánh Giá">Đánh Giá</option>
+                            <option value="Giá Cả">Giá Cả</option>
+                            <option value="Lượt Mua">Lượt Mua</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-1" style="text-align:center;padding:5px"><i class="fas fa-arrow-right"></i></div>
+
+
+                    <div class="col-md-5" style="padding:0px 2px">
+                        <select class="form-control" name="typeSort" id="typeSort">
+                            <option>Giảm Dần</option>
+                            <option>Tăng Dần</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="">Giá Cả</label>
+                <div class="row" style="padding-left:15px">
+                    <div class="col-md-5" style="padding:0px 2px">
+                        <input name="minPrice" class="form-control" type="number" value="@ViewBag.MinPrice" min="0" />
+                    </div>
+                    <div class="col-md-1" style="text-align:center;padding:5px"><i class="fas fa-arrow-right"></i></div>
+
+                    <div class="col-md-5" style="padding:0px 2px">
+                        <input name="maxPrice" class="form-control" type="number" value="@ViewBag.MaxPrice" max="100000000" />
+                    </div>
+                </div>
+                <br style="clear: both;" />
+            </div>
+            <hr style="margin:5px" />
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-info" style="width:100%">Duyệt</button>
+                <hr />
+                <button type="button" class="btn btn-danger" style="width:100%" onclick="location.href = '@Url.Action("Desk")'">Tất Cả</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-9">
+        <div style="padding-top:10px;">
+            <h4 style="float:left"><b>Kệ Thuốc</b></h4>
+            <div style="float:right">
+                <button style="" class="btn btn-default" onclick="setTypeShow('hor')" id="hor"><i class="fas fa-list"></i></button>
+                <button style="" class="btn btn-default" onclick="setTypeShow('ver')" id="ver"><i class="fas fa-th"></i></button>
+            </div>
+        </div>
+        <hr style="clear:both" />
+        <div id="listItem">
+            @foreach (var item in Model)
+            {
+                @Html.Partial("../Partial/_Item", item)
+            }
+        </div>
+        <br style="clear:both" />
+        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+        <div id="decorPage" onload="loadDecor()">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    if (location.href.includes("Filter") == false)
+        document.getElementById("decorPage").innerHTML = '@Html.PagedListPager(Model, page => Url.Action("Desk", new { page }))';
+    else {
+        document.getElementById("decorPage").innerHTML = '@Html.PagedListPager(Model, page => "#")';
+        $('#decorPage > a').click(function () {
+        });
+        var h = document.getElementById("decorPage").getElementsByTagName("a");
+        for (var i = 0; i < h.length; i++)
+        {
+            if (h[i].innerHTML  != "»")
+                h[i].addEventListener("click", function () {
+                    $('#decorForm').append('<input name="page" type="number" value="' + this.innerHTML + '"/>');
+                    document.getElementById('decorForm').getElementsByTagName('button')[0].click();
+                });
+        }
+    }
+
+
+    $('#AuthorId').prepend($('<option value="-1">Tìm Kiếm ...</option>'));
+    $('#AuthorId').trigger("chosen:updated");
+    if ("@ViewBag.Author" != "") {
+        $('#AuthorId').val(@ViewBag.Author);
+    }
+    else {
+        $('#AuthorId').val(-1);
+    }
+    $('#AuthorId').trigger("chosen:updated");
+
+    if ('@ViewBag.Cate' != '') {
+        $('#Categories').val(@ViewBag.Cate);
+        $('#Categories').trigger("chosen:updated");
+    }
+
+    if ('@ViewBag.Rank' != '') {
+        $('#rank').val('@ViewBag.Rank');
+    }
+
+     if ('@ViewBag.nameSort' != '') {
+        $('#nameSort').val('@Html.Raw(ViewBag.nameSort)');
+     }
+     if ('@ViewBag.typeSort' != '') {
+        $('#typeSort').val('@Html.Raw(ViewBag.typeSort)');
+     }
+
+
+    $('#ItemId').prepend($('<option value="-1">Tìm Kiếm ...</option>'));
+    $('#ItemId').trigger("chosen:updated");
+    $('#ItemId').val(-1);
+    $('#ItemId').trigger("chosen:updated");
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

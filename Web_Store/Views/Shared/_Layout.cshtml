@@ -1,0 +1,446 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Thần Y Quán (@ViewBag.Title)</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="~/cardiogram.png"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+          integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Themes/ckeditor/ckeditor.js"></script>
+    <link href="~/Content/main.css" rel="stylesheet" />
+    <link href="~/Content/chosen.css" rel="stylesheet" />
+    <link href="~/Content/chosen.min.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <style>
+        #topBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 16px;
+        }
+
+            #topBtn:hover {
+                background-color: #555;
+            }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button type="button" style="color:white" class="navbar-brand btn btn-info" onclick="location.href = '@Url.Action("News","Home")'">Thần Y Quán <img src="~/cardiogram.png" width="25" height="28" /></button>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId"
+                aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Desk","Home")">Kệ Thuốc <i class="fa fa-pills" aria-hidden="true"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Discuss","Home")">Thảo Luận <i class="fas fa-comments" aria-hidden="true"></i></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">Liên Hệ <i class="fas fa-paper-plane"></i></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="#" onclick="btnContactBox()">Đóng Góp Ý Kiến</a>
+                        <a class="dropdown-item" href="#" onclick="$('html,body').animate({ scrollTop: 9999 }, 'slow')">Liên Hệ Trực Tiếp</a>
+                    </div>
+                </li>
+            </ul>
+            <!--Shopping Bag-->
+            <button id="btnBag" style="width:150px;padding:5px;display:none" class="btn-nothing" type="button" onclick="btnBagClick()">
+                <i style="font-size: 35px;float:left;position:relative;left:10px" class="fa fa-shopping-basket"
+                   aria-hidden="true"></i>
+                <p style="font-size: 12px;margin:0px;"><b>Giỏ Hàng:</b> <br><b>@ViewBag.UserBagItem</b> vật phẩm</p>
+            </button>
+            <!--Shopping Bag-->
+            <ul id="btnUser" class="navbar-nav ml-auto mt-2 mt-lg-0" style="margin:0px !important;">
+                <li class="nav-item dropdown">
+                    <a class="btn btn-outline-success dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnUser">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Navigation Bar -->
+
+    <div id="lightbox" style="display:none">
+    </div>
+    <!-- RenderBody -->
+    <div class="body-content">
+        @RenderBody()
+
+        <!-- Right Side-->
+        <button class="btn btn-success" onclick="topFunction()" id="topBtn" title="Go to top">
+            <i class="fa fa-arrow-up"
+               aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    @Html.Partial("../Partial/_Footer")
+    <!-- Footer -->
+    <!-- Optional JavaScript -->
+
+    <script>
+
+        $("textarea").each(function () {
+            CKEDITOR.replace(this.id);
+            this.style.display = "block";
+            this.style.height = "100px";
+        });
+
+        $('.chosen-select').chosen();
+        $(document).ready(function () {
+            resizeChosen();
+            jQuery(window).on('resize', resizeChosen);
+        });
+
+        function resizeChosen() {
+            $(".chosen-container").each(function () {
+                $(this).attr('style', 'width: 100%');
+            });
+        }
+
+        $(".btn-group > .btn").click(function () {
+            $(".btn-group > .btn").removeClass("btn-default");
+            $(".btn-group > .btn").addClass("btn-secondary");
+
+            $(this).removeClass("btn-secondary");
+            $(this).addClass("btn-default");
+
+            state = this.innerHTML
+            $.ajax({
+                type: "POST",
+                url: "/Home/findBill",
+                data: { state: state },
+                success: function (list) {
+                    document.getElementById("listBill").innerHTML = list;
+                }
+            });
+        });
+
+        function btnBuy() {
+            document.getElementById('UserItem').innerHTML = '<div style="text-align:center;font:20px;height:100%"><i class="fas fa-sync fa-spin"></i></div>'
+            setTimeout($.ajax({
+                type: "POST",
+                url: "/Home/buyItem",
+                success: function (data) {
+                    if (data == "False")
+                        alert("Gặp sự cố ... một số Thuốc không đủ số lượng! đơn hàng đã điều chỉnh lại như sau ...");
+                    else {
+                        alert("Đặt hàng thành công!");
+                        document.getElementById("btnBag").getElementsByTagName("b")[1].innerText = 0;
+                    }
+                },
+            }), 250);
+            setTimeout(function () {
+                var h = document.getElementById("lightbox");
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/UserBag',
+                    dataType: "html",
+                    success: function (bill) {
+                        h.innerHTML = bill;
+                        h.style.display = "block";
+                    },
+                });
+            }, 350);
+        }
+
+        //
+        function resetItem(itemid, quantity) {
+            document.getElementById(itemid + 'ItemBag').innerHTML = '<div style="text-align:center;font:20px"><i class="fas fa-sync fa-spin"></i></div>'
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/ResetUserItemBag",
+                    data: { id: itemid, quantity: quantity },
+                    success: function (quantity) {
+                        if (quantity == -1)
+                            alert("Gặp sự cố ... không có gì thay đổi !")
+                        else
+                           document.getElementById("btnBag").getElementsByTagName("b")[1].innerText = quantity;
+                    },
+                });
+            setTimeout(function () {
+                var h = document.getElementById("lightbox");
+                h.style.pointerEvents = "none";
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/UserBag',
+                    dataType: "html",
+                    success: function (bill) {
+                        h.innerHTML = bill;
+                        h.style.display = "block";
+                    },
+                });
+                h.style.pointerEvents = "auto";
+            }, 300);
+        }
+                //Item To Bag
+        function btnToBag(itemid) {
+            if ('@HttpContext.Current.User.Identity.Name' != '') {
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/ResetUserItemBag',
+                    data: { id: itemid, quantity: 1,add:true },
+                    success: function (quantity) {
+                        document.getElementById("btnBag").getElementsByTagName("b")[1].innerText = quantity;
+                    },
+                });
+            }
+            else {
+                if (confirm("Bạn cần phải đăng nhập để mua hàng! Xin lỗi vì sự bất tiện này ..."))
+                    document.location.href = "/User/Login";
+            }
+        }
+
+        function btnBagClick() {
+            if ('@HttpContext.Current.User.Identity.Name' != '') {
+                var h = document.getElementById("lightbox");
+                if (h.style.display == "none")
+                    $.ajax({
+                        type: "POST",
+                        url: '/Home/UserBag',
+                        dataType: "html",
+                        success: function (bill) {
+                            h.innerHTML = bill;
+                            h.style.display = "block";
+                        },
+                    });
+                else {
+                    h.innerHTML = '';
+                    h.style.display = "none";
+                }
+            }
+        }
+        function btnView(id) {
+            if (id == -1)
+                return false;
+            var h = document.getElementById("lightbox");
+            $.ajax({
+                type: "POST",
+                url: '/Home/ViewItem',
+                data: { id: id },
+                dataType: "html",
+                success: function (item) {
+                    h.innerHTML = item;
+                    h.style.display = "block";
+                },
+            });
+        }
+        function btnRate(id) {
+            var h = document.getElementById("lightbox");
+            $.ajax({
+                type: "POST",
+                url: '/Home/RateItem',
+                data: { id: id },
+                dataType: "html",
+                success: function (item) {
+                    h.innerHTML = item;
+                    h.style.display = "block";
+                },
+            });
+        }
+        function btnSendRate(id) {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SendRate',
+                data: { id: id, Rate: document.getElementById("Rate").value, Comment: document.getElementById("Comment").value },
+                dataType: "html",
+                success: btnCloseView(),
+            });
+        }
+
+        function btnContact(id) {
+            var introduce = document.getElementById('Contact').getElementsByTagName('textarea')[0].value;
+
+            $.ajax({
+                type: "POST",
+                url: '/Home/Contact',
+                data: { introduce: introduce },
+                success: function () {
+                    btnCloseView();
+                    alert('Đóng góp thành công!!');
+                        },
+            });
+        }
+
+        function btnContactBox() {
+             var h = document.getElementById("lightbox");
+            $.ajax({
+                type: "GET",
+                url: '/Home/Contact',
+                dataType: "html",
+                success: function (item) {
+                    h.innerHTML = item;
+                    h.style.display = "block";
+                },
+            });
+        }
+
+        function btnCloseView() {
+            var h = document.getElementById("lightbox");
+            h.style.display = "none";
+            h.innerHTML = '';
+        }
+        //Check Login
+        if ('@HttpContext.Current.User.Identity.Name' != '') {
+            var h = document.getElementById('btnUser');
+            var a = h.getElementsByTagName("a")[0];
+            a.innerHTML += 'Hello, <b>@HttpContext.Current.User.Identity.Name</b> ';
+            a.innerHTML += ('@HttpContext.Current.User.IsInRole("ADMIN")' == "True") ? '<i class="fas fa-user-tie"></i>' :'<i class="fas fa-user"></i>';
+
+            var d = h.getElementsByTagName("div")[0];
+            if ('@HttpContext.Current.User.IsInRole("ADMIN")' == "True")
+                d.innerHTML += '<a class="dropdown-item" href="/Admin"><i class="fas fa-cogs"></i> Quyền Admin </a>';
+            d.innerHTML += '<a class="dropdown-item" href="/User/Details?id=@HttpContext.Current.User.Identity.Name"><i class="far fa-user"></i>  Xem Thông Tin </a>';
+            d.innerHTML += '<a class="dropdown-item" href="/User/Edit?id=@HttpContext.Current.User.Identity.Name"><i class="fas fa-user-cog"></i> Sửa Thông Tin </a>';
+            d.innerHTML += '<a class="dropdown-item" href="/User/Logout"><i class="fas fa-sign-out-alt"></i>  Đăng Xuất</a>';
+
+            document.getElementById("btnBag").style.display = "block";
+        }
+        else {
+            var h = document.getElementById('btnUser');
+            h.getElementsByTagName("a")[0].innerHTML += 'Hello';
+            var d = h.getElementsByTagName("div")[0];
+            d.innerHTML += '<a class="dropdown-item" href="/User/Login"><i class="fas fa-sign-in-alt"></i>  Đăng Nhập </a>';
+            d.innerHTML += '<a class="dropdown-item" href="/User/SignUp"><i class="fas  fa-user-plus"></i> Đăng Ký </a>';
+        }
+
+
+        //Scroll Top
+        //Get the button
+        var mybutton = document.getElementById("topBtn");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+        if (getCookie('typeShow') == "")
+            setCookie('typeShow', "ver");
+        if (document.getElementById(getCookie('typeShow')) != null) {
+            document.getElementById(getCookie('typeShow')).style.color = "blue";
+
+            if (getCookie('typeShow') == 'hor') {
+                var listCard = document.getElementsByClassName("card");
+                for (var i = 0; i < listCard.length; i++) {
+                    listCard[i].style.width = "100%";
+                    listCard[i].style.height = "150px";
+                    listCard[i].getElementsByTagName("div")[0].classList.add("card-horizontal");
+                    listCard[i].getElementsByTagName("img")[0].style.width = "120px";
+                    listCard[i].getElementsByTagName("img")[0].style.height = "150px";
+                }
+            }
+        }
+
+        function setTypeShow(str) {
+            document.getElementById(getCookie('typeShow')).style.color = "black";
+            setCookie('typeShow', str);
+            document.getElementById(str).style.color = "blue";
+            location.reload();
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        //Discuss
+        function sendMessage(id) {
+            var val = document.getElementById(id + 'discuss').getElementsByTagName("input")[0].value;
+            document.getElementById(id + 'discuss').getElementsByTagName("input")[0].value = "";
+            if (val != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/sendMessage",
+                    data: { id: id, message: val },
+                    success: function (done) {
+                        if (done == "True") {
+                            loadMessage(id);
+                        }
+                        else alert("Bình luận không thành công, xin lỗi vì sự bất tiện này ....");
+                    },
+                });
+            }
+        }
+
+        function loadMessage(id) {
+            $.ajax({
+                type: "POST",
+                data: { id: id },
+                url: "/Home/loadMessage",
+                success: function (data) {
+                    document.getElementById(id + 'discuss').parentElement.innerHTML = data;
+                    var d = document.getElementById(id + 'discuss').getElementsByTagName("div")[0];
+                    d.scrollTop = d.scrollHeight;
+                },
+            });
+        }
+    </script>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS, FontAwesome.JS -->
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.1/js/all.js"
+            integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a"
+            crossorigin="anonymous"></script>
+    @Scripts.Render("~/bundles/jquery")
+
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

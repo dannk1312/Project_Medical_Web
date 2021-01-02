@@ -1,0 +1,97 @@
+﻿@model Web_Store.Models.Item
+
+
+<div class="bg-fade"></div>
+<div id="UserItem" class="user-form light-box" style="margin:-350px 0px 0px -35%;width:70%;padding:5px 10px;position:fixed">
+    <button class="btn btn-default" style="position:absolute;top:5px;right:5px" onclick="btnCloseView()"><i style="font-size:20px" class="fas fa-times"></i></button>
+    <h4>Vật Phẩm</h4>
+    <hr style="clear:both" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" style="height:150px;width:100%">
+                <div class="card-horizontal">
+                    <div style="height:150px;"><img src="@Model.ImagePath" alt="Book" style="height:150px;"></div>
+                    <div class="container">
+                        <p class="short-text">
+                            <b>@Model.Name</b>
+                        </p>
+                        <p class="card-content" style="margin-bottom:0px">
+                            Tác Giả: @Model.Author.Name
+                            <br />
+                            @{
+                                if (Model.Sale == null || Model.Sale == 0)
+                                {
+                                    @:@Convert.ToInt32(Model.Price)đ
+                                }
+                                else
+                                {
+                                    @:<del>@Convert.ToInt32(Model.Price)</del>đ
+                                    @:<del>@Convert.ToInt32(Model.Price * (100 - Model.Sale) / 100)</del>đ
+                                }
+                            }
+                            <br />
+                            SL: @Model.Quantity
+
+                        </p>
+                        <div style="float:right">
+                            @if (Model.Quantity > 0)
+                            {
+                                <div id="@(Model.ItemId)btnd" style="display:inline"><button class="btn btn-success" onclick="btnToBag('@Model.ItemId')"><i class="fas fa-shopping-basket"></i> Mua Ngay</button></div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <button style="background-color:gray" class="btn btn-success" onclick="alert('Vật phẩm không đủ số lượng ... xin lỗi vì sự bất tiện này')"><i class="fas fa-shopping-basket"></i> Mua Ngay</button>
+                                </div>
+                            }
+                        </div>
+                        <br style="clear:both" />
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width:100%;height:70px">
+                <div class="container" style="overflow-y:auto">
+                    <b>Thể Loại:</b>
+                    @foreach (var r in Model.Categories)
+                    {
+                        <button type="button" class="btn btn-warning element-nothing">@r.Name</button>
+                    }
+                </div>
+            </div>
+            <div class="card" style="width:100%;height:325px">
+                <div class="container" style="overflow-y:auto">
+                    <b>Giới Thiệu:</b>
+                    @Html.Raw(Model.Introduce)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" style="padding-left:0px">
+            <div class="card container" style="width:100%;height:250px">
+                <div>
+                    <b>Đánh giá:</b>
+                    @(Model.ItemRates.Count() == 0?MvcHtmlString.Create("(Chưa đánh giá)"): Html.Partial("../Partial/_Star", Model.Rate))
+                    <hr />
+                </div>
+                @foreach (var rate in Model.ItemRates)
+                {
+                    <p style="padding:3px 10px;margin:1px; border-radius:4px; background-color:#f4f2f2"><b>@(rate.Account.Username)</b>: @Html.Partial("../Partial/_Star", rate.Rate)<br />@rate.Comment</p>
+                }
+            </div>
+            <div class="card container" style="width:100%;height:300px">
+                <b>Bình Luận:</b>
+                <hr />
+                <div>
+                    @Html.Partial("../Partial/_Discuss", Model.Discuss)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    if (@Model.Quantity== 0) {
+        document.getElementById("@(Model.ItemId)btnd").innerHTML = ''
+    }
+
+</script>

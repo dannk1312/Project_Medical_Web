@@ -1,0 +1,56 @@
+﻿@model Web_Store.Models.News
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div class="user-form" style="width:80%">
+    <div>
+        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","News")'"><h2>News</h2></button>
+        <button type="button" class="btn btn-success" style="pointer-events:none">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <hr />
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label " })
+                <div>
+                    @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.isPublic, htmlAttributes: new { @class = "control-label " })
+                <div class="checkbox">
+                    @Html.DropDownList("isPublic", new SelectList(
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem { Selected = true, Text = "Cộng Đồng", Value = "true"},
+                            new SelectListItem { Selected = false, Text = "Cá Nhân", Value = "false"},
+                        }, "Value", "Text", 1), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.isPublic, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-success" style="width:100%">Create</button>
+            </div>
+        </div>
+
+    }
+
+</div>

@@ -1,0 +1,114 @@
+﻿@model Web_Store.Models.Item
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("List","Items")'"><h2>Item</h2></button>
+    <button type="button" class="btn btn-warning" style="pointer-events:none">
+        <i class="fa fa-edit" aria-hidden="true"></i>
+    </button>
+</div>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal" style="padding:0px 10px">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ItemId)
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.ImagePath, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.ImagePath, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ImagePath, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.PublishDate, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.PublishDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PublishDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label" })
+                <div\>
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="control-label" for="AuthorId">Tác Giả</label>
+                <div style="color:black">
+                    @Html.DropDownList("AuthorId", null, htmlAttributes: new { @class = "form-control chosen-select" })
+                    @Html.ValidationMessageFor(model => model.AuthorId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label" for="Categories">Thể Loại</label>
+                <div>
+                    @Html.DropDownList("Categories", null, htmlAttributes: new { @class = "form-control chosen-select", @multiple = "true" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Introduce, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Introduce, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Introduce, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(".chosen-select").chosen();
+
+    @{
+        if (Model.Categories.Count() > 0)
+        {
+            @: var temp = new Array();
+            foreach (var a in Model.Categories)
+            {
+                @:temp.push(@a.CategoryId.ToString());
+            }
+            @:$("#Categories").val(temp).trigger("chosen:updated");
+        }
+    }
+
+
+</script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
