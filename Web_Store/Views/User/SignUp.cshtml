@@ -48,3 +48,9 @@
     <button class="btn btn-danger" type="button" onclick="location.href = '@Url.Action("Login","User" )'" style="width:100%">Huỷ</button>
 </div>
 }
+
+<script>
+    if ("@ViewBag.err" != "") {
+        alert("@ViewBag.err");
+    }
+</script>

@@ -39,6 +39,7 @@ namespace Web_Store.Controllers
                 FormsAuthentication.SetAuthCookie(check.Username, false);
                 return RedirectToAction("Desk", "Home");
             }
+            ViewBag.err = "Đăng Nhập Thất Bại";
             return View(account);
         }
 
@@ -78,6 +79,7 @@ namespace Web_Store.Controllers
                 return RedirectToAction("Desk", "Home");
             }
 
+            ViewBag.err = "Đăng Ký Thất Bại";
             ViewBag.AccessId = new SelectList(db.Accesses, "AccessId", "Name", account.AccessId);
             return View(account);
         }
