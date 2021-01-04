@@ -157,7 +157,8 @@ namespace Web_Store.Models
                 EarnBill bill = db.EarnBills.First(x => x.BillId == billId);
                 if (bill.Status.Name == "Đang Xử Lí" && (s.Name == "Đã Hoàn Thành" || s.Name == "Đang Vận Chuyển"))
                 {
-                    DeliveryItem(db, billId);
+                    if (!DeliveryItem(db, billId))
+                        return false;
                 }
                 else if (bill.Status.Name == "Đang Vận Chuyển" && s.Name == "Đã Huỷ")
                 {
@@ -330,6 +331,23 @@ namespace Web_Store.Models
             try
             {
                 EarnBill paid = db.EarnBills.First(x => x.BillId == billId);
+                bool okay = true;
+                if (type == -1)
+                {
+                    foreach (var r in paid.Deliveries)
+                    {
+                        Item item = db.Items.Find(r.ItemId);
+                        if (item.Quantity < r.Quantity)
+                        {
+                            r.Quantity = item.Quantity;
+                            db.Entry(r).State = EntityState.Modified;
+                            okay = false;
+                        }
+                    }
+                    if (!okay)
+                        return false;
+                }
+
                 foreach (var r in paid.Deliveries)
                 {
                     Item item = db.Items.Find(r.ItemId);

@@ -64,33 +64,41 @@ namespace Web_Store.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (Categories != null)
-                    for (int i = 0; i < Categories.Length; i++)
-                    {
-                        Item.Categories.Add(db.Categories.Find(Categories[i]));
-                    }
-                Account creater = db.Accounts.Find(HttpContext.User.Identity.Name);
-                Discuss dc = new Discuss()
+                try
                 {
-                    Account = creater,
-                    StartDate = DateTime.Now,
-                    Introduce = "Nói về sách " + Item.Name,
-                    Name = "#TL",
-                };
-                db.Discusses.Add(dc);
-                db.SaveChanges();
+                    db.Items.First(x => x.Name.Contains(Item.Name));
+                    ViewBag.sms = "Item exist ...";
+                }
+                catch
+                {
+                    if (Categories != null)
+                        for (int i = 0; i < Categories.Length; i++)
+                        {
+                            Item.Categories.Add(db.Categories.Find(Categories[i]));
+                        }
+                    Account creater = db.Accounts.Find(HttpContext.User.Identity.Name);
+                    Discuss dc = new Discuss()
+                    {
+                        Account = creater,
+                        StartDate = DateTime.Now,
+                        Introduce = "Nói về sách " + Item.Name,
+                        Name = "#TL",
+                    };
+                    db.Discusses.Add(dc);
+                    db.SaveChanges();
 
-                var list = db.Discusses.Where(x => x.Username == creater.Username).ToList();
-                dc = list[list.Count - 1];
-                Item.Discuss = dc;
-                Item.Quantity = 0;
-                Item.Rate = 0;
-                Item.QuantitySold = 0;
-                db.Items.Add(Item);
-                db.SaveChanges();
-                return RedirectToAction("List");
+                    var list = db.Discusses.Where(x => x.Username == creater.Username).ToList();
+                    dc = list[list.Count - 1];
+                    Item.Discuss = dc;
+                    Item.Quantity = 0;
+                    Item.Rate = 0;
+                    Item.QuantitySold = 0;
+                    db.Items.Add(Item);
+                    db.SaveChanges();
+                    return RedirectToAction("List");
+                }
             }
-
+            
             ViewBag.AuthorId = new SelectList(db.Authors, "AuthorId", "Name", Item.AuthorId);
             ViewBag.Categories = new MultiSelectList(db.Categories, "CategoryId", "Name", Item.Categories);
             return View(Item);

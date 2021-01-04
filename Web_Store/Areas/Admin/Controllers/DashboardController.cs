@@ -26,7 +26,7 @@ namespace Web_Store.Areas.Admin.Controllers
 
             var earnBill = db.EarnBills;
             foreach (var r in earnBill)
-                if (r.Date.Year == year && r.Status.Name != "Đã Huỷ")
+                if (r.Date.Year == year && r.Status.Name == "Đã Hoàn Thành")
                 {
                     earn += (decimal)r.Price;
                     earn12[r.Date.Month] += Convert.ToInt32(r.Price);
@@ -34,7 +34,7 @@ namespace Web_Store.Areas.Admin.Controllers
 
             var paidBill = db.PaidBills;
             foreach (var r in paidBill)
-                if (r.Date.Year == year)
+                if (r.Date.Year == year && r.Status.Name == "Đã Hoàn Thành")
                 {
                     paid += (decimal)r.Price;
                     paid12[r.Date.Month] += Convert.ToInt32(r.Price);
