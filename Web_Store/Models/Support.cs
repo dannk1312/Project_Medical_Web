@@ -135,6 +135,24 @@ namespace Web_Store.Models
             try
             {
                 EarnBill bill = (billId != null) ? user.EarnBills.First(x => x.BillId == billId) : user.EarnBills.First(x => x.Status.Name == "Đang Chờ");
+
+                bool okay = true;
+                foreach (var r in bill.Deliveries)
+                {
+                    Item item = db.Items.Find(r.ItemId);
+                    if (item.Quantity < r.Quantity)
+                    {
+                        r.Quantity = item.Quantity;
+                        db.Entry(r).State = EntityState.Modified;
+                        okay = false;
+                    }
+                }
+                if (!okay)
+                {
+                    db.SaveChanges();
+                    return false;
+                }
+
                 bill.Status = db.Status.First(x => x.Name == state2);
                 bill.Address = user.Address;
                 db.Entry(bill).State = EntityState.Modified;
@@ -331,22 +349,6 @@ namespace Web_Store.Models
             try
             {
                 EarnBill paid = db.EarnBills.First(x => x.BillId == billId);
-                bool okay = true;
-                if (type == -1)
-                {
-                    foreach (var r in paid.Deliveries)
-                    {
-                        Item item = db.Items.Find(r.ItemId);
-                        if (item.Quantity < r.Quantity)
-                        {
-                            r.Quantity = item.Quantity;
-                            db.Entry(r).State = EntityState.Modified;
-                            okay = false;
-                        }
-                    }
-                    if (!okay)
-                        return false;
-                }
 
                 foreach (var r in paid.Deliveries)
                 {
